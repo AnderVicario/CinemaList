@@ -1,0 +1,15 @@
+# Usa una imagen de Python
+FROM python:3.9-slim
+
+# Copia los archivos de la aplicación
+COPY . /app
+WORKDIR /app
+
+# Instala las dependencias
+RUN pip install -r requirements.txt
+
+# Expone el puerto de Flask
+EXPOSE 5000
+
+# Ejecuta la app
+CMD ["python", "app.py"]

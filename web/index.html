@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies Data</title>
+</head>
+<body>
+    <h1>Movies Data</h1>
+    <ul id="data-list"></ul>
+
+    <script>
+        fetch('/data')
+            .then(response => response.json())
+            .then(data => {
+                const dataList = document.getElementById('data-list');
+                data.forEach(movie => {
+                    const item = document.createElement('li');
+                    item.textContent = `${movie.Name}, ${movie.Date}, ${movie.Rate}, ${movie.Votes}, ${movie.Genre}`;
+                    dataList.appendChild(item);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>
