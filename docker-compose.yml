@@ -26,6 +26,8 @@ services:
       - app-network
     secrets:
       - mongodb_password
+    volumes:
+      - ./app:/app
 
   db:
     build: ./db
