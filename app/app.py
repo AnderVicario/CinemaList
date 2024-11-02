@@ -4,8 +4,13 @@ import os
 
 app = Flask(__name__)
 
-# Configura la URI de MongoDB
-mongo_password = os.environ.get("MONGODB_PASSWORD")  # Obtén la contraseña del entorno
+# Función para leer la contraseña desde el archivo secreto
+def read_mongo_password():
+    with open('/run/secrets/mongodb_password', 'r') as file:
+        return file.read().strip()  # Leer y eliminar cualquier espacio en blanco
+
+# Configura la URI de MongoDB usando la contraseña leída
+mongo_password = read_mongo_password()
 app.config["MONGO_URI"] = f"mongodb://mongodb:{mongo_password}@mongodb:27017/movies?authSource=admin"
 mongo = PyMongo(app)
 

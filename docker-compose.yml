@@ -24,13 +24,15 @@ services:
       - MONGODB_PASSWORD=/run/secrets/mongodb_password
     networks:
       - app-network
+    secrets:
+      - mongodb_password
 
   db:
     build: ./db
     container_name: mongodb
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongodb
-      MONGO_INITDB_ROOT_PASSWORD: /run/secrets/mongodb_password
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongodb_password
       MONGO_INITDB_DATABASE: movies
     ports:
       - "27017:27017"
