@@ -41,7 +41,7 @@
           </div>
           <div class="flex flex-1 justify-end gap-8">
             <div class="flex items-center gap-9">
-              <a class="text-white text-sm font-medium leading-normal" href="#">Home</a>
+              <a class="text-white text-sm font-medium leading-normal" href="/">Home</a>
               <a class="text-white text-sm font-medium leading-normal" href="#">Watchlist</a>
             </div>
             <div class="flex gap-2">
@@ -118,204 +118,84 @@
                   <p class="text-white text-sm font-bold leading-normal tracking-[0.015em]">Details</p>
                 </a>
                 <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#9dabb8] pb-[13px] pt-4" href="#">
-                  <p class="text-[#9dabb8] text-sm font-bold leading-normal tracking-[0.015em]">Cast &amp; Crew</p>
-                </a>
-                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#9dabb8] pb-[13px] pt-4" href="#">
-                  <p class="text-[#9dabb8] text-sm font-bold leading-normal tracking-[0.015em]">Reviews</p>
-                </a>
-                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#9dabb8] pb-[13px] pt-4" href="#">
-                  <p class="text-[#9dabb8] text-sm font-bold leading-normal tracking-[0.015em]">Related</p>
+                  <p class="text-[#9dabb8] text-sm font-bold leading-normal tracking-[0.015em]">Other</p>
                 </a>
               </div>
             </div>
+            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Details</h3>
             <p class="text-white text-base font-normal leading-normal pb-3 pt-1 px-4">
-              After a botched money delivery, Lola has 20 minutes to come up with 100,000 Deutschmarks. Director: Tom Tykwer Writers: Tom Tykwer (screenplay), Tom Tykwer (story)
-              Stars: Franka Potente, Moritz Bleibtreu, Herbert Knaup
+              {{description}}
             </p>
-            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Cast</h3>
-            <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-              <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/stability/827a50de-c1e1-4628-ad67-ad7ce736268e.png");'
-                ></div>
-                <p class="text-white text-base font-medium leading-normal">Franka Potente</p>
+            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Rating</h3>
+            <div class="flex flex-col gap-3 p-4">
+              <div class="flex gap-6 justify-between">
+                <p class="text-[#FFFFFF] text-base font-medium leading-normal">Average rating</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Rate}}</p>
               </div>
-              <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/stability/cf0c9512-bfdc-4440-a4a9-60f7bb4322ea.png");'
-                ></div>
-                <p class="text-white text-base font-medium leading-normal">Moritz Bleibtreu</p>
-              </div>
-              <div class="flex flex-col gap-3 pb-3">
-                <div
-                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
-                  style='background-image: url("https://cdn.usegalileo.ai/stability/f3eae6c9-8feb-46f3-8a7e-62328e11c1c6.png");'
-                ></div>
-                <p class="text-white text-base font-medium leading-normal">Herbert Knaup</p>
-              </div>
+              <div class="rounded bg-[#2F3B46]"><div class="h-2 rounded bg-[#359EFF]" style="width: {{movie.Rate * 10}}%;"></div></div>
+              <p class="text-[#9BACBB] text-sm font-normal leading-normal">{{movie.Votes}} votes</p>
+              <form action="{{ url_for('submit_value') }}" method="POST" class="flex gap-6 justify-between">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <input
+                    type="number"
+                    name="input_value"
+                    placeholder="0"
+                    min="0"
+                    max="10"
+                    step="1"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#FFFFFF] 
+                          focus:outline-0 focus:ring-0 border-none bg-[#27313A] focus:border-none h-14 
+                          placeholder:text-[#9BACBB] p-4 text-base font-normal leading-normal"
+                    value=""
+                  />
+                </label>
+                <button type="submit" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden 
+                       rounded-lg px-4 flex-1 bg-[#359EFF] text-[#FFFFFF] text-sm font-bold leading-normal tracking-[0.015em]">
+                  <span class="truncate">Submit</span>
+                </button>
+              </form>
             </div>
-            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Reviews</h3>
-            <div class="flex flex-col gap-8 overflow-x-hidden bg-[#111418] p-4">
-              <div class="flex flex-col gap-3 bg-[#111418]">
-                <div class="flex items-center gap-3">
-                  <div
-                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                    style='background-image: url("https://cdn.usegalileo.ai/stability/a49383e3-0a30-4bc4-9200-3deb7b715b7e.png");'
-                  ></div>
-                  <div class="flex-1">
-                    <p class="text-white text-base font-medium leading-normal">Cinephile</p>
-                    <p class="text-[#9dabb8] text-sm font-normal leading-normal">Jan 1, 2023</p>
-                  </div>
-                </div>
-                <div class="flex gap-0.5">
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-                <p class="text-white text-base font-normal leading-normal">
-                  This is one of the best films I’ve ever seen. The story is unique and keeps you on the edge of your seat. The cinematography is visually stunning and the
-                  soundtrack is amazing. Highly recommend!
-                </p>
+            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Other</h3>
+            <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Genre</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Genre}}</p>
               </div>
-              <div class="flex flex-col gap-3 bg-[#111418]">
-                <div class="flex items-center gap-3">
-                  <div
-                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                    style='background-image: url("https://cdn.usegalileo.ai/stability/e8cf99a1-7939-40e1-84e3-6fb36dcc66b5.png");'
-                  ></div>
-                  <div class="flex-1">
-                    <p class="text-white text-base font-medium leading-normal">Movie Buff</p>
-                    <p class="text-[#9dabb8] text-sm font-normal leading-normal">Jan 1, 2023</p>
-                  </div>
-                </div>
-                <div class="flex gap-0.5">
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-[#566676]" data-icon="Star" data-size="20px" data-weight="regular">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-                <p class="text-white text-base font-normal leading-normal">
-                  Run Lola Run is an entertaining and fast-paced film. It's a fun and creative take on the thriller genre. The use of split screen and different scenarios is
-                  cleverly done. It’s a bit repetitive at times but still enjoyable.
-                </p>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Duration</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Duration}}</p>
               </div>
-              <div class="flex flex-col gap-3 bg-[#111418]">
-                <div class="flex items-center gap-3">
-                  <div
-                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                    style='background-image: url("https://cdn.usegalileo.ai/stability/841a50d0-1fa4-4887-a1dc-b916eaefce0c.png");'
-                  ></div>
-                  <div class="flex-1">
-                    <p class="text-white text-base font-medium leading-normal">Film Fanatic</p>
-                    <p class="text-[#9dabb8] text-sm font-normal leading-normal">Jan 1, 2023</p>
-                  </div>
-                </div>
-                <div class="flex gap-0.5">
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-white" data-icon="Star" data-size="20px" data-weight="fill">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M234.5,114.38l-45.1,39.36,13.51,58.6a16,16,0,0,1-23.84,17.34l-51.11-31-51,31a16,16,0,0,1-23.84-17.34L66.61,153.8,21.5,114.38a16,16,0,0,1,9.11-28.06l59.46-5.15,23.21-55.36a15.95,15.95,0,0,1,29.44,0h0L166,81.17l59.44,5.15a16,16,0,0,1,9.11,28.06Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-[#566676]" data-icon="Star" data-size="20px" data-weight="regular">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="text-[#566676]" data-icon="Star" data-size="20px" data-weight="regular">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
-                      <path
-                        d="M239.2,97.29a16,16,0,0,0-13.81-11L166,81.17,142.72,25.81h0a15.95,15.95,0,0,0-29.44,0L90.07,81.17,30.61,86.32a16,16,0,0,0-9.11,28.06L66.61,153.8,53.09,212.34a16,16,0,0,0,23.84,17.34l51-31,51.11,31a16,16,0,0,0,23.84-17.34l-13.51-58.6,45.1-39.36A16,16,0,0,0,239.2,97.29Zm-15.22,5-45.1,39.36a16,16,0,0,0-5.08,15.71L187.35,216v0l-51.07-31a15.9,15.9,0,0,0-16.54,0l-51,31h0L82.2,157.4a16,16,0,0,0-5.08-15.71L32,102.35a.37.37,0,0,1,0-.09l59.44-5.14a16,16,0,0,0,13.35-9.75L128,32.08l23.2,55.29a16,16,0,0,0,13.35,9.75L224,102.26S224,102.32,224,102.33Z"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-                <p class="text-white text-base font-normal leading-normal">
-                  Run Lola Run is an okay movie. The concept is interesting but it gets a bit repetitive. The pacing is fast but the characters lack depth. The techno music is cool
-                  though. It’s worth a watch if you like action films.
-                </p>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Type</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Type}}</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Certificate</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Certificate}}</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Episodes</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Episodes}}</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Nudity</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Nudity}}</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Violence</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Violence}}</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Profanity</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Profanity}}</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Alcohol</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Alcohol}}</p>
+              </div>
+              <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
+                <p class="text-[#9BACBB] text-sm font-normal leading-normal">Frightening</p>
+                <p class="text-[#FFFFFF] text-sm font-normal leading-normal">{{movie.Frightening}}</p>
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
-from flask import Flask, jsonify, render_template, request, abort
+from flask import Flask, jsonify, render_template, request, abort, url_for, redirect
 from flask_pymongo import PyMongo
 from bson.son import SON
-import film_addons
+import utilities
 import os
 
 
@@ -50,12 +50,22 @@ def movie_detail(name):
 
     if movie is None:
         movie = mongo.db.movies.find_one({"Name": int(name)})
-        if movie is None:
-            abort(404)
 
-    url = film_addons.obtener_portada_pelicula(str(movie["Name"]), str(movie["Date"]))
-    return render_template('movie.html', movie=movie, url=url)
+    if movie is None:
+        abort(404)
 
+    url, description = utilities.obtener_datos_pelicula(str(movie["Name"]), str(movie["Date"]))
+    return render_template('movie.html', movie=movie, url=url, description=description)
+
+
+# Ruta para añadir rating
+@app.route('/submit_value', methods=['POST'])
+def submit_value():
+    input_value = request.form.get('input_value')  # Obtener el valor del input
+
+    print("Valor recibido:", input_value)
+
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

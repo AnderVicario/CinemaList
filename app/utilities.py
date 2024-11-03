@@ -1,6 +1,6 @@
 import requests
 
-def obtener_portada_pelicula(title, year):
+def obtener_datos_pelicula(title, year):
     base_url = "https://api.themoviedb.org/3"
     search_url = f"{base_url}/search/movie?query={title}&primary_release_year={year}"
 
@@ -16,8 +16,9 @@ def obtener_portada_pelicula(title, year):
     
     if data['results']:
         pelicula = data['results'][0]
-        poster_path = pelicula.get('poster_path')
+        poster_path = pelicula.get('backdrop_path')
+        description = pelicula.get('overview')
         if poster_path:
             poster_url = f"https://image.tmdb.org/t/p/w500{poster_path}"
-            return poster_url
-    return None
+            return poster_url, description
+    return None, "This movie has not an available description."
