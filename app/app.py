@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request, abort, url_for, redirect
 from flask_pymongo import PyMongo
 from bson.son import SON
+from bson import ObjectId
 import utilities
 import os
 
@@ -61,9 +62,34 @@ def movie_detail(name):
 # Ruta para añadir rating
 @app.route('/submit_value', methods=['POST'])
 def submit_value():
-    input_value = request.form.get('input_value')  # Obtener el valor del input
+    input_value = request.form.get('input_value')
+    movie_id = request.form.get('movie_id')
 
-    print("Valor recibido:", input_value)
+    movie = mongo.db.movies.find_one({"_id": ObjectId(movie_id)})
+    if movie:
+        # Manejo especial para 'No Votes' y 'No Rate'
+        votes_str = movie.get("Votes", "0")
+        rate_str = movie.get("Rate", "0")
+
+        if votes_str == 'No Votes':
+            votes = 0
+        else:
+            votes = int(votes_str.replace(',', ''))
+
+        if rate_str == 'No Rate':
+            rate = 0.0  # O puedes establecer otro valor predeterminado si prefieres
+        else:
+            rate = float(rate_str)
+
+        new_votes = votes + 1
+        new_rate = (votes * rate + int(input_value)) / new_votes if new_votes > 0 else float(input_value)
+        
+        new_votes_formatted = f"{new_votes:,}"
+
+        mongo.db.movies.update_one(
+            {"_id": ObjectId(movie_id)},
+            {"$set": {"Rate": new_rate, "Votes": new_votes_formatted}}
+        )
 
     return redirect(url_for('home'))
 
