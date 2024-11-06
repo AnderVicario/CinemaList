@@ -74,7 +74,7 @@ def submit_value():
         if votes_str == 'No Votes':
             votes = 0
         else:
-            votes = int(votes_str.replace(',', ''))
+            votes = int(str(votes_str).replace(',', ''))
 
         if rate_str == 'No Rate':
             rate = 0.0  # O puedes establecer otro valor predeterminado si prefieres
@@ -83,7 +83,8 @@ def submit_value():
 
         new_votes = votes + 1
         new_rate = (votes * rate + int(input_value)) / new_votes if new_votes > 0 else float(input_value)
-        
+        new_rate = round(new_rate, 1)
+
         new_votes_formatted = f"{new_votes:,}"
 
         mongo.db.movies.update_one(
@@ -92,6 +93,10 @@ def submit_value():
         )
 
     return redirect(url_for('home'))
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
