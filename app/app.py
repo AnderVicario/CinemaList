@@ -1,7 +1,8 @@
-from flask import Flask, jsonify, render_template, request, abort, url_for, redirect
+from flask import Flask, render_template, request, abort, url_for, redirect, session
 from flask_pymongo import PyMongo
 from bson.son import SON
 from bson import ObjectId
+from datetime import timedelta
 import utilities
 import os
 
@@ -14,21 +15,24 @@ def read_mongo_password():
         return file.read().strip()
 
 mongo_password = read_mongo_password()
+app.secret_key = mongo_password
+app.permanent_session_lifetime = timedelta(minutes=10)
 app.config["MONGO_URI"] = f"mongodb://mongodb:{mongo_password}@mongodb:27017/movies?authSource=admin"
 mongo = PyMongo(app)
 
 
 def clean_votes(votes):
-    if isinstance(votes, int):  # Si ya es un entero, devuelve el valor
+    if isinstance(votes, int):
         return votes
     if votes == 'No Votes':
-        return 0  # O manejarlo de otra manera
+        return 0
     return int(votes.replace(',', ''))
 
 
 # Ruta principal
 @app.route('/')
 def home():
+    is_logged_in = 'user_id' in session
     sort_by = request.args.get('sort_by', 'Name')
     order = request.args.get('order', 'asc')
 
@@ -41,12 +45,27 @@ def home():
     else:
         movies = list(mongo.db.movies.find({}, {"_id": 0}).sort(sort_by, sort_order))
 
-    return render_template('home.html', movies=movies, sort_by=sort_by, order=order)
+    return render_template('home.html', movies=movies, sort_by=sort_by, order=order, is_logged_in=is_logged_in)
+
+
+@app.route('/reminder')
+def reminder_list():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    is_logged_in = True
+    user_id = session['user_id']
+    user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+
+    movies = user.get('movies', [])
+
+    return render_template('reminder.html', movies=movies, is_logged_in=is_logged_in)
 
 
 # Ruta para ver cada pelicula
 @app.route('/movies/name=<path:name>')
 def movie_detail(name):
+    is_logged_in = 'user_id' in session
     movie = mongo.db.movies.find_one({"Name": name})
 
     if movie is None:
@@ -56,7 +75,7 @@ def movie_detail(name):
         abort(404)
 
     url, description = utilities.obtener_datos_pelicula(str(movie["Name"]), str(movie["Date"]))
-    return render_template('movie.html', movie=movie, url=url, description=description)
+    return render_template('movie.html', movie=movie, url=url, description=description, is_logged_in=is_logged_in)
 
 
 # Ruta para añadir rating
@@ -67,7 +86,6 @@ def submit_value():
 
     movie = mongo.db.movies.find_one({"_id": ObjectId(movie_id)})
     if movie:
-        # Manejo especial para 'No Votes' y 'No Rate'
         votes_str = movie.get("Votes", "0")
         rate_str = movie.get("Rate", "0")
 
@@ -77,7 +95,7 @@ def submit_value():
             votes = int(str(votes_str).replace(',', ''))
 
         if rate_str == 'No Rate':
-            rate = 0.0  # O puedes establecer otro valor predeterminado si prefieres
+            rate = 0.0
         else:
             rate = float(rate_str)
 
@@ -94,9 +112,35 @@ def submit_value():
 
     return redirect(url_for('home'))
 
-@app.route('/login')
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template('login.html')
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        user = mongo.db.users.find_one({"email": email})
+
+        if user:
+            user = mongo.db.users.find_one({"email": email, "password": password})
+            if user:
+                session.permanent = True # Inicar una nueva sesión
+                session['user_id'] = str(user['_id'])
+                return redirect(url_for("home"))
+            else:
+                return redirect(url_for("login"))
+        else:
+            new_user = mongo.db.users.insert_one({"email": email, "password": password, "movies": []})
+            session.permanent = True # Inicar una nueva sesión
+            session['user_id'] = str(new_user.inserted_id)
+            return redirect(url_for("home"))
+
+    else:
+        return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.pop('user_id', None)  # Cerrar la sesión del usuario
+    return redirect(url_for("login"))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

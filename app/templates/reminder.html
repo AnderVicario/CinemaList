@@ -1,0 +1,143 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Be+Vietnam+Pro%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Galileo Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+  <body>
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-[#111418] dark group/design-root overflow-x-hidden"
+      style='font-family: "Be Vietnam Pro", "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#293038] px-10 py-3">
+          <div class="flex items-center gap-4 text-white">
+            <div class="size-4">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Cinema</h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+              <a class="text-white text-sm font-medium leading-normal" href="/">Home</a>
+              <a class="text-white text-sm font-medium leading-normal" href="/reminder">Reminder</a>
+            </div>
+            <div class="flex gap-2">
+              <button
+                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#293038] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+              >
+                <div class="text-white" data-icon="MagnifyingGlass" data-size="20px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                    ></path>
+                  </svg>
+                </div>
+              </button>
+              <button
+                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#293038] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+              >
+                <div class="text-white" data-icon="VideoCamera" data-size="20px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M251.77,73a8,8,0,0,0-8.21.39L208,97.05V72a16,16,0,0,0-16-16H32A16,16,0,0,0,16,72V184a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V159l35.56,23.71A8,8,0,0,0,248,184a8,8,0,0,0,8-8V80A8,8,0,0,0,251.77,73ZM192,184H32V72H192V184Zm48-22.95-32-21.33V116.28L240,95Z"
+                    ></path>
+                  </svg>
+                </div>
+              </button>
+              {% if is_logged_in %}
+              <button
+                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#293038] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+                onclick="window.location.href='/logout';">
+                <div class="text-white" data-icon="User" data-size="20px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"
+                    ></path>
+                  </svg>
+                </div>
+                Cerrar sesión
+              </button>
+              {% else %}
+              <button
+                class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 bg-[#293038] text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+                onclick="window.location.href='/login';">
+                <div class="text-white" data-icon="User" data-size="20px" data-weight="regular">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                    <path
+                      d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"
+                    ></path>
+                  </svg>
+                </div>
+                Iniciar sesión
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </header>
+        <div class="flex justify-end gap-2 p-4">
+          <form method="get" action="/">
+            <label for="sort_by" class="text-white text-sm font-medium leading-normal">Ordenar por:</label>
+            <select id="sort_by" name="sort_by" class="bg-[#293038] text-white p-2 rounded-md text-sm border-0 min-w-[180px] font-medium leading-normal">
+              <option value="Name" {% if sort_by == 'Name' %}selected{% endif %}>Título</option>
+              <option value="Date" {% if sort_by == 'Date' %}selected{% endif %}>Año</option>
+              <option value="Rate" {% if sort_by == 'Rate' %}selected{% endif %}>Calificación</option>
+              <option value="Votes" {% if sort_by == 'Votes' %}selected{% endif %}>N. Votos</option>
+            </select>
+            
+            <label for="order" class="text-white text-sm font-medium leading-normal">Orden:</label>
+            <select id="order" name="order" class="bg-[#293038] text-white p-2 rounded-md text-sm border-0 min-w-[180px] font-medium leading-normal">
+              <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascendente</option>
+              <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descendente</option>
+            </select>
+        
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 text-sm font-medium leading-normal">Ordenar</button>
+          </form>
+        </div>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="container mx-auto">
+              <main class="mt-5">
+                  <h2 class="text-xl font-semibold text-white">Películas</h2>
+                  <div class="grid grid-cols-3 gap-4 mt-4">
+                      {% for movie in movies %}
+                          <div class="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                              <a href="{{ url_for('movie_detail', name=movie.Name) }}" class="block text-white text-center">
+                                  <h3 class="text-lg font-semibold">{{ movie.Name }} ({{ movie.Date }})</h3>
+                                  <p class="text-sm">{{ movie.Rate }} | {{ movie.Votes }} votes</p>
+                                  <p class="text-sm">{{ movie.Genre }}</p>
+                              </a>
+                          </div>
+                      {% else %}
+                          <div class="text-white col-span-3 text-center">No se encontraron películas.</div>
+                      {% endfor %}
+                  </div>
+              </main>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

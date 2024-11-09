@@ -1,5 +1,5 @@
 # Usar la imagen oficial de MongoDB como base
-FROM mongo:latest
+FROM mongo:4.4
 
 # Copiar el archivo CSV en el contenedor
 COPY data.csv /docker-entrypoint-initdb.d/data.csv
