@@ -45,6 +45,29 @@ services:
     secrets:
       - mongodb_password
 
+  postfix:
+    image: juanluisbaptiste/postfix
+    container_name: postfix
+    environment:
+      - SMTP_SERVER=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USERNAME=noreply.cinemadocker@gmail.com
+      - SMTP_PASSWORD=sowqdyofphdrayeh
+      - SERVER_HOSTNAME=gmail.com
+      - ALWAYS_ADD_MISSING_HEADERS=yes
+      - SMTP_USE_TLS=yes
+    ports:
+      - "25:25"
+    networks:
+      - app-network
+    volumes:
+      - postfix-data:/var/spool/postfix
+      - postfix-logs:/var/log/mail
+
+volumes:
+  postfix-data:
+  postfix-logs:
+
 networks:
   app-network:
     driver: bridge

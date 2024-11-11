@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, request, abort, url_for, redirect, session
 from flask_pymongo import PyMongo
+from flask_mail import Mail, Message
 from bson.son import SON
 from bson import ObjectId
 from datetime import timedelta
@@ -10,7 +11,7 @@ import os
 
 app = Flask(__name__)
 
-# Configurar base de datos
+# Configuración de la base de datos MongoDB
 def read_mongo_password():
     with open('/run/secrets/mongodb_password', 'r') as file:
         return file.read().strip()
@@ -21,6 +22,27 @@ app.permanent_session_lifetime = timedelta(minutes=10)
 app.config["MONGO_URI"] = f"mongodb://mongodb:{mongo_password}@mongodb:27017/movies?authSource=admin"
 mongo = PyMongo(app)
 
+# Configuración de Flask-Mail para usar Postfix como servidor SMTP
+app.config.update(
+    MAIL_SERVER='postfix',  # Docker service name
+    MAIL_PORT=25,
+    MAIL_USE_TLS=False,     # No TLS for internal postfix communication
+    MAIL_USE_SSL=False,
+    MAIL_DEFAULT_SENDER='noreply.cinemadocker@gmail.com'
+)
+
+mail = Mail(app)
+
+# Ruta para enviar un correo
+@app.route("/send_email")
+def send_email():
+    msg = Message("Hello", sender="noreply.cinemadocker@gmail.com", recipients=["andervicariozabala@gmail.com"])
+    msg.body = "This is a test email."
+    try:
+        mail.send(msg)
+        return "Email sent!"
+    except Exception as e:
+        return f"Error sending email: {str(e)}"
 
 def clean_votes(votes):
     if isinstance(votes, int):
