@@ -1,2 +1,3 @@
 /mongodb_password.txt
 /db/data
+/app/__pycache__
