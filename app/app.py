@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, abort, url_for, redirect, session
+from flask import Flask, jsonify, render_template, request, abort, url_for, redirect, session
 from flask_pymongo import PyMongo
 from bson.son import SON
 from bson import ObjectId
 from datetime import timedelta
+from datetime import datetime
 import utilities
 import os
 
@@ -48,6 +49,7 @@ def home():
     return render_template('home.html', movies=movies, sort_by=sort_by, order=order, is_logged_in=is_logged_in)
 
 
+# Ruta para la lista de recordatorios
 @app.route('/reminder')
 def reminder_list():
     if 'user_id' not in session:
@@ -56,10 +58,40 @@ def reminder_list():
     is_logged_in = True
     user_id = session['user_id']
     user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    user_movies_info = user.get('movies', [])
 
-    movies = user.get('movies', [])
+    movies = []
+    for movie in user_movies_info:
+        movie_data = mongo.db.movies.find_one({"_id": ObjectId(movie['movie'])})
+        if movie_data:
+            Name = movie_data.get('Name')
+            Date = movie_data.get('Date')
+            url, description = utilities.obtener_datos_pelicula(str(Name), str(Date))
+            movies.append({
+                "id": movie['movie'],
+                "Name": Name,
+                "Date": Date,
+                "Picture": url,
+                "Description": description,
+                "ReminderDate": movie.get('date', 'Fecha no disponible')
+            })
 
     return render_template('reminder.html', movies=movies, is_logged_in=is_logged_in)
+
+
+# Ruta para actualizar recordatorios
+@app.route('/update_reminder/<movie_id>', methods=['POST'])
+def update_reminder(movie_id):
+    new_date = request.form['reminder_date']
+    user_id = session['user_id']
+
+    # Actualizar fecha en la lista de películas del usuario
+    mongo.db.users.update_one(
+        {"_id": ObjectId(user_id), "movies.movie": ObjectId(movie_id)},
+        {"$set": {"movies.$.date": new_date}}
+    )
+
+    return redirect(url_for('reminder_list'))
 
 
 # Ruta para ver cada pelicula
@@ -76,6 +108,37 @@ def movie_detail(name):
 
     url, description = utilities.obtener_datos_pelicula(str(movie["Name"]), str(movie["Date"]))
     return render_template('movie.html', movie=movie, url=url, description=description, is_logged_in=is_logged_in)
+
+
+# Ruta para agregar/quitar película favorita
+@app.route('/toggle_movie', methods=['POST'])
+def toggle_movie():
+    # Obtener la información del JSON enviado desde el cliente
+    data = request.get_json()
+    user_id = session.get('user_id')
+    movie_id = data.get('movieId')
+    
+    if user_id and movie_id:
+        # Buscar el usuario por el user_id
+        user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+        
+        # Verifica si la película ya está en la lista
+        if any(movie['movie'] == ObjectId(movie_id) for movie in user.get('movies', [])):
+            # Eliminar la película si ya está en la lista
+            mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$pull": {"movies": {"movie": ObjectId(movie_id)}}}
+            )
+            return jsonify({"status": "removed"})
+        else:
+            # Agregar la película si no está en la lista
+            mongo.db.users.update_one(
+                {"_id": ObjectId(user_id)},
+                {"$push": {"movies": {"movie": ObjectId(movie_id), "date": ""}}}
+            )
+            return jsonify({"status": "added"})
+
+    return jsonify({"status": "error"}), 400
 
 
 # Ruta para añadir rating
@@ -112,6 +175,8 @@ def submit_value():
 
     return redirect(url_for('home'))
 
+
+# Ruta para loguearte
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -137,6 +202,8 @@ def login():
     else:
         return render_template("login.html")
 
+
+# Ruta para desloguearte
 @app.route("/logout")
 def logout():
     session.pop('user_id', None)  # Cerrar la sesión del usuario
