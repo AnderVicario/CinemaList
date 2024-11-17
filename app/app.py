@@ -252,6 +252,7 @@ def send_reminder_emails():
         
         for user in users_with_movies:
             email = user.get("email")
+            id = user.get("_id")
             movies_today = []
             
             # Iterar sobre las películas y buscar sus títulos
@@ -260,6 +261,23 @@ def send_reminder_emails():
                     movie = mongo.db.movies.find_one({"_id": ObjectId(movie_entry["movie"])})
                     if movie:
                         movies_today.append(str(movie["Name"]))  # Agregar el título de la película a la lista
+                        mongo.db.users.update_one(
+                            {
+                                "_id": ObjectId(id),
+                                "movies": {
+                                    "$elemMatch": {
+                                        "movie": ObjectId(movie_entry["movie"]),
+                                        "date": today
+                                    }
+                                }
+                            },
+                            {
+                                "$set": {
+                                    "movies.$.date": ""
+                                }
+                            }
+                        )
+                        logger.info(str(id) + "<--user, movie-->" + str(movie_entry["movie"]))
             
             if movies_today:  # Si hay películas programadas para hoy
                 # Crear el cuerpo del mensaje con las películas
@@ -287,7 +305,7 @@ def send_reminder_emails():
                         logger.info(f"Error enviando correo a {email}: {str(e)}")
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(send_reminder_emails, 'interval', seconds=10)
+scheduler.add_job(send_reminder_emails, 'interval', minutes=1)
 
 def init_scheduler():
     if not scheduler.running:
