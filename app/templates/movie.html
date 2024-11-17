@@ -163,19 +163,22 @@
             </div>
             <div class="pb-3">
               <div class="flex border-b border-[#3c4753] px-4 gap-8">
-                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-white text-white pb-[13px] pt-4" href="#">
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-white text-white pb-[13px] pt-4" href="#details">
                   <p class="text-white text-sm font-bold leading-normal tracking-[0.015em]">Details</p>
                 </a>
-                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#9dabb8] pb-[13px] pt-4" href="#">
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#9dabb8] pb-[13px] pt-4" href="#rating">
+                  <p class="text-[#9dabb8] text-sm font-bold leading-normal tracking-[0.015em]">Rating</p>
+                </a>
+                <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#9dabb8] pb-[13px] pt-4" href="#other">
                   <p class="text-[#9dabb8] text-sm font-bold leading-normal tracking-[0.015em]">Other</p>
                 </a>
               </div>
             </div>
-            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Details</h3>
+            <h3 id="details" class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Details</h3>
             <p class="text-white text-base font-normal leading-normal pb-3 pt-1 px-4">
               {{description}}
             </p>
-            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Rating</h3>
+            <h3 id="rating" class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Rating</h3>
             <div class="flex flex-col gap-3 p-4">
               <div class="flex gap-6 justify-between">
                 <p class="text-[#FFFFFF] text-base font-medium leading-normal">Average rating</p>
@@ -205,7 +208,7 @@
                 </button>
               </form>
             </div>
-            <h3 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Other</h3>
+            <h3 id="other" class="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Other</h3>
             <div class="p-4 grid grid-cols-[20%_1fr] gap-x-6">
               <div class="col-span-2 grid grid-cols-subgrid border-t border-t-[#2F3B46] py-5">
                 <p class="text-[#9BACBB] text-sm font-normal leading-normal">Genre</p>
