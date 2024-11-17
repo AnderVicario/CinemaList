@@ -3,10 +3,18 @@ from flask_pymongo import PyMongo
 from flask_mail import Mail, Message
 from bson.son import SON
 from bson import ObjectId
+from datetime import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import timedelta
 from datetime import datetime
 import utilities
 import os
+import logging
+
+# Configurar logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 
 app = Flask(__name__)
@@ -231,5 +239,63 @@ def logout():
     session.pop('user_id', None)  # Cerrar la sesión del usuario
     return redirect(url_for("login"))
 
+
+# Enviar correos
+def send_reminder_emails():
+    with app.app_context():
+        today = datetime.now().strftime('%Y-%m-%d')
+        
+        # Buscar usuarios con películas asociadas a la fecha actual
+        users_with_movies = mongo.db.users.find({
+            "movies.date": today
+        })
+        
+        for user in users_with_movies:
+            email = user.get("email")
+            movies_today = []
+            
+            # Iterar sobre las películas y buscar sus títulos
+            for movie_entry in user["movies"]:
+                if movie_entry["date"] == today:
+                    movie = mongo.db.movies.find_one({"_id": ObjectId(movie_entry["movie"])})
+                    if movie:
+                        movies_today.append(str(movie["Name"]))  # Agregar el título de la película a la lista
+            
+            if movies_today:  # Si hay películas programadas para hoy
+                # Crear el cuerpo del mensaje con las películas
+                movie_list = "\n".join(movies_today)
+                msg_body = (
+                    f"Hola!,\n\n"
+                    f"Estas son las películas que tienes programadas para hoy:\n\n{movie_list}\n\n"
+                    "¡Disfruta del cine!"
+                )
+                
+                logger.info(msg_body)
+
+                # Enviar el correo
+                if email:
+                    msg = Message(
+                        "Recordatorio de películas", 
+                        sender="noreply.cinemadocker@gmail.com", 
+                        recipients=[email]
+                    )
+                    msg.body = msg_body
+                    try:
+                        mail.send(msg)
+                        logger.info(f"Correo enviado a {email}")
+                    except Exception as e:
+                        logger.info(f"Error enviando correo a {email}: {str(e)}")
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(send_reminder_emails, 'interval', seconds=10)
+
+def init_scheduler():
+    if not scheduler.running:
+        logger.info("Iniciando scheduler...")
+        scheduler.start()
+        logger.info("Scheduler iniciado correctamente")
+
+
 if __name__ == '__main__':
+    init_scheduler()
     app.run(host='0.0.0.0', port=5000)
