@@ -10,6 +10,8 @@ from datetime import datetime
 import utilities
 import os
 import logging
+import bcrypt
+
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -21,8 +23,13 @@ app = Flask(__name__)
 
 # Configuración de la base de datos MongoDB
 def read_mongo_password():
-    with open('/run/secrets/mongodb_password', 'r') as file:
-        return file.read().strip()
+    file_path = '/run/secrets/mongodb_password'
+    
+    try:
+        with open(file_path, 'r') as file:
+            return file.read().strip()
+    except FileNotFoundError:
+        return os.environ.get('MONGODB_PASSWORD')
 
 mongo_password = read_mongo_password()
 app.secret_key = mongo_password
@@ -216,21 +223,27 @@ def login():
         user = mongo.db.users.find_one({"email": email})
 
         if user:
-            user = mongo.db.users.find_one({"email": email, "password": password})
-            if user:
-                session.permanent = True # Inicar una nueva sesión
+            # Verificar si la contraseña hasheada coincide
+            if bcrypt.checkpw(password.encode('utf-8'), user['password']):
+                session.permanent = True
                 session['user_id'] = str(user['_id'])
                 return redirect(url_for("home"))
             else:
+                # Contraseña incorrecta
                 return redirect(url_for("login"))
         else:
-            new_user = mongo.db.users.insert_one({"email": email, "password": password, "movies": []})
-            session.permanent = True # Inicar una nueva sesión
+            # Crear nuevo usuario con contraseña hasheada
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            new_user = mongo.db.users.insert_one({
+                "email": email, 
+                "password": hashed_password,
+                "movies": []
+            })
+            session.permanent = True
             session['user_id'] = str(new_user.inserted_id)
             return redirect(url_for("home"))
 
-    else:
-        return render_template("login.html")
+    return render_template("login.html")
 
 
 # Ruta para desloguearte
