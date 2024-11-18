@@ -23,13 +23,14 @@ app = Flask(__name__)
 
 # Configuración de la base de datos MongoDB
 def read_mongo_password():
-    file_path = '/run/secrets/mongodb_password'
+    with open('/run/secrets/mongodb_password', 'r') as file:
+        return file.read().strip()
     
-    try:
-        with open(file_path, 'r') as file:
-            return file.read().strip()
-    except FileNotFoundError:
-        return os.environ.get('MONGODB_PASSWORD')
+
+def read_apiKey():
+    with open('/run/secrets/apiKey', 'r') as file:
+        return file.read().strip()
+
 
 mongo_password = read_mongo_password()
 app.secret_key = mongo_password
@@ -48,16 +49,6 @@ app.config.update(
 
 mail = Mail(app)
 
-# Ruta para enviar un correo
-@app.route("/send_email")
-def send_email():
-    msg = Message("Hello", sender="noreply.cinemadocker@gmail.com", recipients=["andervicariozabala@gmail.com"])
-    msg.body = "This is a test email."
-    try:
-        mail.send(msg)
-        return "Email sent!"
-    except Exception as e:
-        return f"Error sending email: {str(e)}"
 
 def clean_votes(votes):
     if isinstance(votes, int):
@@ -103,7 +94,7 @@ def reminder_list():
         if movie_data:
             Name = movie_data.get('Name')
             Date = movie_data.get('Date')
-            url, description = utilities.obtener_datos_pelicula(str(Name), str(Date))
+            url, description = utilities.obtener_datos_pelicula(str(Name), str(Date), read_apiKey())
             movies.append({
                 "id": movie['movie'],
                 "Name": Name,
@@ -143,7 +134,7 @@ def movie_detail(name):
     if movie is None:
         abort(404)
 
-    url, description = utilities.obtener_datos_pelicula(str(movie["Name"]), str(movie["Date"]))
+    url, description = utilities.obtener_datos_pelicula(str(movie["Name"]), str(movie["Date"]), read_apiKey())
     return render_template('movie.html', movie=movie, url=url, description=description, is_logged_in=is_logged_in)
 
 
@@ -296,7 +287,7 @@ def send_reminder_emails():
                 # Crear el cuerpo del mensaje con las películas
                 movie_list = "\n".join(movies_today)
                 msg_body = (
-                    f"Hola!,\n\n"
+                    f"¡Hola!\n\n"
                     f"Estas son las películas que tienes programadas para hoy:\n\n{movie_list}\n\n"
                     "¡Disfruta del cine!"
                 )

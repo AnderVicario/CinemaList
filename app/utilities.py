@@ -1,12 +1,13 @@
 import requests
 
-def obtener_datos_pelicula(title, year):
+def obtener_datos_pelicula(title, year, apiKey):
     base_url = "https://api.themoviedb.org/3"
     search_url = f"{base_url}/search/movie?query={title}&primary_release_year={year}"
 
+    auth = f"Bearer {apiKey}"
     headers = {
         "accept": "application/json",
-        "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMTJhZjZhMjRlYjhiYTEzMTg2YjIyY2MzYmU3NDM1OCIsIm5iZiI6MTczMDU1NjcyMy4zNDU2MTQ3LCJzdWIiOiI2NzI2MzBkMWU3MjU4NDhhMTkzYWJjNTYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.WnA94wxrpQ-ixwG3hQ_7lId3GfZq_pJbZvnRsy5gmQQ"
+        "Authorization": auth
     }
 
     response = requests.get(search_url, headers=headers)

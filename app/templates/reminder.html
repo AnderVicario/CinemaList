@@ -96,25 +96,6 @@
             </div>
           </div>
         </header>
-        <div class="flex justify-end gap-2 p-4">
-          <form method="get" action="/">
-            <label for="sort_by" class="text-white text-sm font-medium leading-normal">Ordenar por:</label>
-            <select id="sort_by" name="sort_by" class="bg-[#293038] text-white p-2 rounded-md text-sm border-0 min-w-[180px] font-medium leading-normal">
-              <option value="Name" {% if sort_by == 'Name' %}selected{% endif %}>Título</option>
-              <option value="Date" {% if sort_by == 'Date' %}selected{% endif %}>Año</option>
-              <option value="Rate" {% if sort_by == 'Rate' %}selected{% endif %}>Calificación</option>
-              <option value="Votes" {% if sort_by == 'Votes' %}selected{% endif %}>N. Votos</option>
-            </select>
-            
-            <label for="order" class="text-white text-sm font-medium leading-normal">Orden:</label>
-            <select id="order" name="order" class="bg-[#293038] text-white p-2 rounded-md text-sm border-0 min-w-[180px] font-medium leading-normal">
-              <option value="asc" {% if order == 'asc' %}selected{% endif %}>Ascendente</option>
-              <option value="desc" {% if order == 'desc' %}selected{% endif %}>Descendente</option>
-            </select>
-        
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 text-sm font-medium leading-normal">Ordenar</button>
-          </form>
-        </div>
         <div class="px-40 flex flex-1 justify-center py-5">
           <div class="container mx-auto">
               <main class="mt-5">
