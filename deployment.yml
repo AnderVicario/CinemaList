@@ -82,7 +82,7 @@ spec:
           subPath: apiKey.txt
           readOnly: true
       volumes:
-      - name: mongodb-secret # kubectl create secret generic mongodb-password --from-file=mongodb_password.txt
+      - name: mongodb-secret # kubectl create secret generic mongodb-secret --from-file=mongodb_password.txt
         secret:
           secretName: mongodb-password
       - name: api-key-secret # kubectl create secret generic api-key --from-file=apiKey.txt
@@ -208,7 +208,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nginx-config
-  namespace: default # Cambia esto si trabajas en un namespace diferente
+  namespace: default
 data:
   default.conf: |
     server {
