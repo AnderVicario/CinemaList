@@ -2,7 +2,6 @@ services:
   web:
     image: nginx:alpine
     volumes:
-      - ./web:/usr/share/nginx/html
       - ./web/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - "80:80"
@@ -20,14 +19,11 @@ services:
       - db
     environment:
       - FLASK_APP=app.py
-      - FLASK_ENV=development
     networks:
       - app-network
     secrets:
       - mongodb_password
       - apiKey
-    volumes:
-      - ./app:/app
 
   db:
     build: ./db
@@ -54,13 +50,6 @@ services:
       - "25:25"
     networks:
       - app-network
-    volumes:
-      - postfix-data:/var/spool/postfix
-      - postfix-logs:/var/log/mail
-
-volumes:
-  postfix-data:
-  postfix-logs:
 
 networks:
   app-network:

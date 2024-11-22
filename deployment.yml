@@ -84,7 +84,7 @@ spec:
       volumes:
       - name: mongodb-secret # kubectl create secret generic mongodb-secret --from-file=mongodb_password.txt
         secret:
-          secretName: mongodb-password
+          secretName: mongodb-secret
       - name: api-key-secret # kubectl create secret generic api-key --from-file=apiKey.txt
         secret:
           secretName: api-key
@@ -178,18 +178,6 @@ spec:
         envFrom:
         - secretRef:
             name: postfix-secret # kubectl create secret generic postfix-secret --from-env-file=postfix.env
-        volumeMounts:
-        - name: postfix-data
-          mountPath: /var/spool/postfix
-        - name: postfix-logs
-          mountPath: /var/log/mail
-      volumes:
-      - name: postfix-data
-        persistentVolumeClaim:
-          claimName: postfix-data-pvc
-      - name: postfix-logs
-        persistentVolumeClaim:
-          claimName: postfix-logs-pvc
 
 ---
 apiVersion: v1
@@ -267,27 +255,3 @@ spec:
   resources:
     requests:
       storage: 10Gi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postfix-data-pvc
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-      
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postfix-logs-pvc
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 500Mi
